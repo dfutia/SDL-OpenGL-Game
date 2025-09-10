@@ -12,7 +12,7 @@ add_executable (UntitledGame
     "core/window.h"
     "platform/sdl/sdlwindow.h" "platform/sdl/sdlwindow.cpp"
     "platform/sdl/sdlinput.h" "platform/sdl/sdlinput.cpp"
- "core/game.h" "core/game.cpp" "platform/sdl/sdlcontext.h" "renderer/renderer.h" "platform/gl/glrenderer.h" "platform/gl/glrenderer.cpp")
+ "core/game.h" "core/game.cpp" "platform/sdl/sdlcontext.h" "renderer/renderer.h" "platform/gl/glrenderer.h" "platform/gl/glrenderer.cpp" "renderer/camera.h" "renderer/mesh.h" "core/world.h")
 
 target_include_directories(UntitledGame PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"   

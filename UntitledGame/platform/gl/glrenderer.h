@@ -3,7 +3,33 @@
 
 #include "renderer/renderer.h"
 
+#include <glad/glad.h>
+
 class Window;
+
+class GLIndexBuffer : public IndexBuffer
+{
+public:
+	GLIndexBuffer() = default;
+	~GLIndexBuffer() = default;
+private:
+	GLuint mVAO, mVBO;
+	unsigned int mVertexCount;
+};
+
+class GLVertexBuffer : public VertexBuffer
+{
+public:
+	GLVertexBuffer() = default;
+	~GLVertexBuffer() = default;
+private:
+	GLuint mBufferId;
+	unsigned int mCount;
+};
+
+//class GLVertexArray : public VertexArray
+//{
+//};
 
 class GLRenderer : public Renderer
 {
