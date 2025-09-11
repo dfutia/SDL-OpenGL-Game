@@ -4,10 +4,17 @@
 class Window;
 class Input;
 class Renderer;
+class ResourceManager;
 class World;
 
+class Camera;
+class VertexBuffer;
+class IndexBuffer;
+class ShaderProgram;
+
 class Game
-{public:
+{
+public:
 	Game() = default;
 	~Game();
 
@@ -20,7 +27,13 @@ private:
 	Window* mWindow;
 	Input* mInput;
 	Renderer* mRenderer;
+	ResourceManager* mResourceManager;
 	World* mWorld;
+
+	Camera* mCamera;
+	VertexBuffer* mCubeVB;
+	IndexBuffer* mCubeIB;
+	ShaderProgram* mShaderProgram;
 
 	void loadResources();
 	void update();
