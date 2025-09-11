@@ -32,7 +32,9 @@ add_executable(UntitledGame
     "core/services.h"               "core/services.cpp"
     "platform/gl/glshader.cpp"
     "platform/gl/glbuffer.cpp"
- "core/platform.h" "platform/sdl/sdlplatform.h" "platform/sdl/sdlplatform.cpp")
+ "core/platform.h" "platform/sdl/sdlplatform.h" "platform/sdl/sdlplatform.cpp"
+ "platform/sdl/sdlkeyboard.cpp"  "platform/sdl/sdlmouse.cpp"
+)
 
 # Copy assets directory to build output after build.
 add_custom_command(

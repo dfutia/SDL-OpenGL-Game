@@ -13,15 +13,19 @@
 
 #include <imgui.h>
 
+#include <print>
+
 Game::Game(Platform* platform)
 {
 	mRenderer = new GLRenderer;
 	mWorld = new World;
+	mResourceManager = new ResourceManager;
 	mInput = Services::getService<Input>("Input");
 }
 
 Game::~Game()
 {
+	delete mResourceManager;
 	delete mWorld;
 	delete mRenderer;
 }

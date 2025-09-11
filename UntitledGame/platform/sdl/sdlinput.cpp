@@ -2,8 +2,6 @@
 
 #include "core/services.h"
 
-#include <SDL.h>
-
 #include <imgui.h>
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
@@ -11,6 +9,8 @@
 SDLInput::SDLInput()
 {
 	Services::registerService<Input>("Input", this);
+	mKeyboard = new SDLKeyboard();
+	mMouse = new SDLMouse();
 }
 
 bool SDLInput::exitRequested()
@@ -36,4 +36,7 @@ void SDLInput::pollInput()
 			break;
 		}
 	}
+
+	mKeyboard->update();
+	mMouse->update();
 }
