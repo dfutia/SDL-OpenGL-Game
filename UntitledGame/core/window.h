@@ -1,5 +1,5 @@
-#ifndef PLATFORM_H
-#define PLATFORM_H
+#ifndef WINDOW_H
+#define WINDOW_H
 
 class Window
 {
@@ -12,4 +12,4 @@ public:
 private:
 };
 
-#endif // PLATFORM_H
+#endif // WINDOW_H

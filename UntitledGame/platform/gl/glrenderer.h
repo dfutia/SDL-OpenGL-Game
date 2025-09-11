@@ -72,7 +72,7 @@ private:
 class GLRenderer : public Renderer
 {
 public:
-	GLRenderer(Window* window);
+	GLRenderer();
 	~GLRenderer() = default;
 
 	VertexBuffer* createVertexBuffer(const Vertex* data, unsigned int count) override;

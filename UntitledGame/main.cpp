@@ -1,11 +1,11 @@
 #include "core/game.h"
-#include "platform/sdl/sdlcontext.h"
+
+#include "platform/sdl/sdlplatform.h"
 
 int main(int argc, char* argv[])
 {
-	SDLContext sdlContext; // don't know where to put this
-
-	Game* game = new Game();
+	Platform* platform = new SDLPlatform;
+	Game* game = new Game(platform);
 
 	game->init();
 
@@ -15,6 +15,7 @@ int main(int argc, char* argv[])
 	}
 
 	delete game;
+	delete platform;
 
 	return 0;
 }

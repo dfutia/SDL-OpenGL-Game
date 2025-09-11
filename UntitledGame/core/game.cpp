@@ -1,20 +1,29 @@
 #include "core/game.h"
 #include "core/input.h"
 #include "core/world.h"
+#include "core/services.h"
 
 #include "renderer/camera.h"
 
+#include "platform/sdl/sdlplatform.h"
 #include "platform/sdl/sdlwindow.h"
 #include "platform/sdl/sdlinput.h"
 
 #include "platform/gl/glrenderer.h"
 
+#include <imgui.h>
+
+Game::Game(Platform* platform)
+{
+	mRenderer = new GLRenderer;
+	mWorld = new World;
+	mInput = Services::getService<Input>("Input");
+}
+
 Game::~Game()
 {
 	delete mWorld;
 	delete mRenderer;
-	delete mInput;
-	delete mWindow;
 }
 
 bool Game::exitRequested() const
@@ -29,11 +38,6 @@ void Game::loadResources()
 
 void Game::init()
 {
-	mWindow = new SDLWindow;
-	mInput = new SDLInput();
-	mRenderer = new GLRenderer(mWindow);
-	mWorld = new World();
-
 	loadResources();
 
 	mCamera = new Camera(
@@ -88,6 +92,8 @@ void Game::update()
 
 void Game::render()
 {
+	ImGui::ShowDemoWindow();
+
 	mRenderer->bindResource(mShaderProgram);
 
 	glm::mat4 model = glm::mat4(1.0f);

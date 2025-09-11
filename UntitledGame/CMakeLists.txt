@@ -6,13 +6,23 @@ find_package(OpenGL REQUIRED)
 # Add source files to this project's executable.
 add_executable(UntitledGame
     "${CMAKE_SOURCE_DIR}/vendor/glad/src/glad.c"
+
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/imgui.cpp"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/imgui_demo.cpp"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/imgui_draw.cpp"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/imgui_tables.cpp"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/imgui_widgets.cpp"
+
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_sdl2.cpp"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/backends/imgui_impl_opengl3.cpp"
+
     "main.cpp"
     "core/input.h"
     "core/window.h"
     "platform/sdl/sdlwindow.h"      "platform/sdl/sdlwindow.cpp"
     "platform/sdl/sdlinput.h"       "platform/sdl/sdlinput.cpp"
     "core/game.h"                   "core/game.cpp"
-    "platform/sdl/sdlcontext.h"
+    
     "renderer/renderer.h"
     "platform/gl/glrenderer.h"      "platform/gl/glrenderer.cpp"
     "renderer/camera.h"
@@ -22,7 +32,7 @@ add_executable(UntitledGame
     "core/services.h"               "core/services.cpp"
     "platform/gl/glshader.cpp"
     "platform/gl/glbuffer.cpp"
-)
+ "core/platform.h" "platform/sdl/sdlplatform.h" "platform/sdl/sdlplatform.cpp")
 
 # Copy assets directory to build output after build.
 add_custom_command(
@@ -38,6 +48,8 @@ target_include_directories(UntitledGame PRIVATE
     "${CMAKE_SOURCE_DIR}/vendor/SDL2/include"
     "${CMAKE_SOURCE_DIR}/vendor/glad/include"
     "${CMAKE_SOURCE_DIR}/vendor/glm"
+    "${CMAKE_SOURCE_DIR}/vendor/imgui"         
+    "${CMAKE_SOURCE_DIR}/vendor/imgui/backends" 
 )
 
 # Link against libraries.

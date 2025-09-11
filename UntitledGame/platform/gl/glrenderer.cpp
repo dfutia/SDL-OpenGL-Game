@@ -6,6 +6,10 @@
 #include <SDL.h>
 #include <glad/glad.h>
 
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
+
 VertexBuffer* GLRenderer::createVertexBuffer(const Vertex* data, unsigned int count)
 {
 	return new GLVertexBuffer(data, count);
@@ -16,9 +20,11 @@ IndexBuffer* GLRenderer::createIndexBuffer(const unsigned int* indices, unsigned
 	return new GLIndexBuffer(indices, count);
 }
 
-GLRenderer::GLRenderer(Window* window) : mWindow(window)
+GLRenderer::GLRenderer()
 {
 	Services::registerService<Renderer>("Renderer", this);
+
+	mWindow = Services::getService<Window>("Window");
 
 	gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
 
@@ -79,9 +85,28 @@ void GLRenderer::beginFrame()
 {
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	ImGui_ImplOpenGL3_NewFrame();
+	ImGui_ImplSDL2_NewFrame();
+	ImGui::NewFrame();
 }
 
 void GLRenderer::endFrame()
 {
+	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+	static ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+		SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+
+		SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+	}
+
 	mWindow->swapBuffers();
 }

@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+class Platform;
 class Window;
 class Input;
 class Renderer;
@@ -15,7 +16,7 @@ class ShaderProgram;
 class Game
 {
 public:
-	Game() = default;
+	Game(Platform* platform);
 	~Game();
 
 	bool exitRequested() const;

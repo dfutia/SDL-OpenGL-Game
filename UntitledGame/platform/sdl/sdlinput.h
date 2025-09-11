@@ -6,6 +6,9 @@
 class SDLInput : public Input
 {
 public:
+	SDLInput();
+	~SDLInput() = default;
+
 	bool exitRequested() override;
 	void pollInput() override;
 private:
