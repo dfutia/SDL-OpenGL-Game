@@ -129,7 +129,10 @@ void Game::update(double deltaTime)
 void Game::render(double alpha)
 {
 	mRenderer->beginFrame();
-	ImGui::ShowDemoWindow();
+
+#ifdef _DEBUG
+	debugUI();
+#endif
 
 	mRenderer->bindResource(mShaderProgram);
 
@@ -156,3 +159,48 @@ void Game::render(double alpha)
 	mRenderer->unbindResource(mShaderProgram);
 	mRenderer->endFrame();
 }
+
+#ifdef _DEBUG
+void Game::debugUI()
+{
+	//ImGui::ShowDemoWindow();
+
+	if (ImGui::Begin("Camera"))
+	{
+		glm::vec3 camPos = mCamera->getPosition();
+		ImGui::Text("Position: (%.2f, %.2f, %.2f)", camPos.x, camPos.y, camPos.z);
+		glm::vec3 camFront = mCamera->getFront();
+		ImGui::Text("Front: (%.2f, %.2f, %.2f)", camFront.x, camFront.y, camFront.z);
+		glm::vec3 camUp = mCamera->getUp();
+		ImGui::Text("Up: (%.2f, %.2f, %.2f)", camUp.x, camUp.y, camUp.z);
+		glm::vec3 camRight = mCamera->getRight();
+		ImGui::Text("Right: (%.2f, %.2f, %.2f)", camRight.x, camRight.y, camRight.z);
+		ImGui::Text("FOV: %.2f", mCamera->getFOV());
+		ImGui::Text("Aspect Ratio: %.2f", mCamera->getAspectRatio());
+		ImGui::Text("Near Plane: %.2f", mCamera->getNearPlane());
+		ImGui::Text("Far Plane: %.2f", mCamera->getFarPlane());
+
+		glm::mat4 view = mCamera->getViewMatrix();
+		glm::mat4 proj = mCamera->getProjectionMatrix();
+
+		if (ImGui::CollapsingHeader("View Matrix"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				ImGui::Text("%.3f  %.3f  %.3f  %.3f",
+					view[i][0], view[i][1], view[i][2], view[i][3]);
+			}
+		}
+
+		if (ImGui::CollapsingHeader("Projection Matrix"))
+		{
+			for (int i = 0; i < 4; i++)
+			{
+				ImGui::Text("%.3f  %.3f  %.3f  %.3f",
+					proj[i][0], proj[i][1], proj[i][2], proj[i][3]);
+			}
+		}
+	}
+	ImGui::End();
+}
+#endif

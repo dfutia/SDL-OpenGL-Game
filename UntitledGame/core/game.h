@@ -40,6 +40,10 @@ private:
 
 	void loadResources();
 	void update(double deltaTime);
+
+#ifdef _DEBUG
+	void debugUI();
+#endif
 };
 
 #endif // GAME_H
