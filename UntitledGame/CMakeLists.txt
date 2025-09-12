@@ -26,6 +26,7 @@ add_executable(UntitledGame
     "renderer/renderer.h"
     "platform/gl/glrenderer.h"      "platform/gl/glrenderer.cpp"
     "renderer/camera.h"
+    "renderer/camerabehavior.h"
     "renderer/mesh.h"
     "core/world.h"
     "renderer/resourcemanager.cpp"
@@ -34,7 +35,7 @@ add_executable(UntitledGame
     "platform/gl/glbuffer.cpp"
  "core/platform.h" "platform/sdl/sdlplatform.h" "platform/sdl/sdlplatform.cpp"
  "platform/sdl/sdlkeyboard.cpp"  "platform/sdl/sdlmouse.cpp"
-)
+ "renderer/camerabehavior.cpp")
 
 # Copy assets directory to build output after build.
 add_custom_command(

@@ -22,8 +22,8 @@ public:
 	bool exitRequested() const;
 
 	void init();
-	void tick();
-
+	void tick(double deltaTime);
+	void render(double alpha);
 private:
 	Window* mWindow;
 	Input* mInput;
@@ -37,8 +37,7 @@ private:
 	ShaderProgram* mShaderProgram;
 
 	void loadResources();
-	void update();
-	void render();
+	void update(double deltaTime);
 };
 
 #endif // GAME_H

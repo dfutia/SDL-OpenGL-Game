@@ -30,6 +30,24 @@ bool SDLMouse::isButtonReleased(MouseButton button)
 	return (mPrevButtons & buttonFlag) && !(mCurrButtons & buttonFlag);
 }
 
+void SDLMouse::setCursorMode(CursorMode mode)
+{
+	if (mode == CursorMode::Normal)
+	{
+		SDL_SetRelativeMouseMode(SDL_FALSE);
+		SDL_ShowCursor(SDL_ENABLE);
+	}
+	else if (mode == CursorMode::Locked)
+	{
+		SDL_SetRelativeMouseMode(SDL_TRUE);
+		SDL_ShowCursor(SDL_DISABLE);
+
+		// swallow the first delta
+		int x, y;
+		SDL_GetRelativeMouseState(&x, &y);
+	}
+}
+
 glm::vec2 SDLMouse::getMousePosition()
 {
 	return mCurrPos;
@@ -47,13 +65,20 @@ float SDLMouse::getScrollDelta()
 
 void SDLMouse::update()
 {
-	mPrevButtons = mCurrButtons;
-	mPrevPos = mCurrPos;
-	mDelta = glm::vec2(0, 0);
-	mScrollDelta = 0.0f;
+    mPrevButtons = mCurrButtons;
+    mDelta = glm::vec2(0, 0);
+    mScrollDelta = 0.0f;
 
-	int x, y;
-	mCurrButtons = SDL_GetMouseState(&x, &y);
-	mCurrPos = glm::vec2(x, y);
-	mDelta = mCurrPos - mPrevPos;
+    if (SDL_GetRelativeMouseMode()) {
+        int dx, dy;
+        mCurrButtons = SDL_GetRelativeMouseState(&dx, &dy);
+        mDelta = glm::vec2(dx, dy);
+    }
+    else {
+        mPrevPos = mCurrPos;
+        int x, y;
+        mCurrButtons = SDL_GetMouseState(&x, &y);
+        mCurrPos = glm::vec2(x, y);
+        mDelta = mCurrPos - mPrevPos;
+    }
 }

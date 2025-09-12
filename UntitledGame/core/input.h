@@ -31,6 +31,12 @@ enum class MouseButton
 	X2 = 5
 };
 
+enum class CursorMode
+{
+	Normal,
+	Locked   
+};
+
 class InputDevice
 {
 public:
@@ -64,6 +70,9 @@ public:
 	virtual bool isButtonDown(MouseButton button) = 0;
 	virtual bool isButtonPressed(MouseButton button) = 0;
 	virtual bool isButtonReleased(MouseButton button) = 0;
+
+	virtual void setCursorMode(CursorMode mode) = 0;
+	virtual CursorMode getCursorMode() const = 0;
 
 	virtual glm::vec2 getMousePosition() = 0;
 	virtual glm::vec2 getMouseDelta() = 0;

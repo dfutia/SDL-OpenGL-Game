@@ -4,6 +4,7 @@
 #include "core/services.h"
 
 #include "renderer/camera.h"
+#include "renderer/camerabehavior.h"
 
 #include "platform/sdl/sdlplatform.h"
 #include "platform/sdl/sdlwindow.h"
@@ -78,24 +79,24 @@ void Game::init()
 
 	mCubeVB = mRenderer->createVertexBuffer(cubeVertices, sizeof(cubeVertices) / sizeof(Vertex));
 	mCubeIB = mRenderer->createIndexBuffer(cubeIndices, sizeof(cubeIndices) / sizeof(unsigned int));
+
+	mCamera->setBehavior(new DebugCamera);
 }
 
-void Game::tick()
+void Game::tick(double deltaTime)
 {
 	mInput->pollInput();
-	update();
+	update(deltaTime);
+}
+
+void Game::update(double deltaTime)
+{
+	mCamera->update(deltaTime);
+}
+
+void Game::render(double alpha)
+{
 	mRenderer->beginFrame();
-	render();
-	mRenderer->endFrame();
-}
-
-void Game::update()
-{
-
-}
-
-void Game::render()
-{
 	ImGui::ShowDemoWindow();
 
 	mRenderer->bindResource(mShaderProgram);
@@ -117,4 +118,5 @@ void Game::render()
 	mRenderer->unbindResource(mCubeIB);
 	mRenderer->unbindResource(mCubeVB);
 	mRenderer->unbindResource(mShaderProgram);
+	mRenderer->endFrame();
 }

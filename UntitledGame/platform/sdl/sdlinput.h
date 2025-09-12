@@ -39,12 +39,16 @@ public:
 	bool isButtonPressed(MouseButton button) override;
 	bool isButtonReleased(MouseButton button) override;
 
+	void setCursorMode(CursorMode mode) override;
+	CursorMode getCursorMode() const override { return mCursorMode; }
+
 	glm::vec2 getMousePosition() override;
 	glm::vec2 getMouseDelta() override;
 	float getScrollDelta() override;
 
 	void update() override;
 private:
+	CursorMode mCursorMode = CursorMode::Normal;
 	Uint32 mPrevButtons = 0;
 	Uint32 mCurrButtons = 0;
 	glm::vec2 mPrevPos{ 0, 0 };
