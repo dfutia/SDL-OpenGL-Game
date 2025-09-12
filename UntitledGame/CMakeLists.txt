@@ -35,7 +35,9 @@ add_executable(UntitledGame
     "platform/gl/glbuffer.cpp"
  "core/platform.h" "platform/sdl/sdlplatform.h" "platform/sdl/sdlplatform.cpp"
  "platform/sdl/sdlkeyboard.cpp"  "platform/sdl/sdlmouse.cpp"
- "renderer/camerabehavior.cpp")
+ "renderer/camerabehavior.cpp"
+ "platform/gl/gltexture.cpp"
+ "renderer/texture.cpp")
 
 # Copy assets directory to build output after build.
 add_custom_command(
@@ -50,6 +52,7 @@ target_include_directories(UntitledGame PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${CMAKE_SOURCE_DIR}/vendor/SDL2/include"
     "${CMAKE_SOURCE_DIR}/vendor/glad/include"
+    "${CMAKE_SOURCE_DIR}/vendor/stb"
     "${CMAKE_SOURCE_DIR}/vendor/glm"
     "${CMAKE_SOURCE_DIR}/vendor/imgui"         
     "${CMAKE_SOURCE_DIR}/vendor/imgui/backends" 

@@ -10,6 +10,20 @@
 #include <imgui_impl_sdl2.h>
 #include <imgui_impl_opengl3.h>
 
+GPUTexture* GLRenderer::createTexture(int width, int height, void* data)
+{
+	GLTexture* texture = new GLTexture(width, height, false);
+	glBindTexture(GL_TEXTURE_2D, texture->getResourceID());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	return texture;
+}
+
 VertexBuffer* GLRenderer::createVertexBuffer(const Vertex* data, unsigned int count)
 {
 	return new GLVertexBuffer(data, count);
@@ -44,6 +58,19 @@ GPUResource* GLRenderer::createFragmentShader(const char* code)
 ShaderProgram* GLRenderer::createShaderProgram(GPUResource* vs, GPUResource* fs)
 {
 	return new GLProgram(static_cast<GLShader*>(vs), static_cast<GLShader*>(fs));
+}
+
+void GLRenderer::bindTexture(GPUTexture* texture, int index)
+{
+	glActiveTexture(GL_TEXTURE0 + index);
+	if (texture->isCubeMap())
+	{
+		glBindTexture(GL_TEXTURE_CUBE_MAP, texture->getResourceID());
+	}
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, texture->getResourceID());
+	}
 }
 
 void GLRenderer::bindResource(GPUResource* resource)

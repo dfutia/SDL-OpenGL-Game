@@ -39,6 +39,7 @@ bool Game::exitRequested() const
 void Game::loadResources()
 {
 	mShaderProgram = mResourceManager->loadShaders("assets/basic.vert", "assets/basic.frag");
+	mTexture = mResourceManager->loadTexture("assets/container.jpg");
 }
 
 void Game::init()
@@ -49,32 +50,63 @@ void Game::init()
 		glm::vec3(0.0f, 0.0f, 3.0f),
 		glm::vec3(0.0f, 0.0f, -1.0f),
 		glm::vec3(0.0f, 1.0f, 0.0f),
-		60.0f,
-		800.0f / 600.0f,
+		70.0f,
+		1280.0f / 720.0f,
 		0.1f,
-		100.0f
+		1000.0f
 	);
 
 	const Vertex cubeVertices[] = {
-		// Front face
-		{{-0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
-		{{ 0.5f, -0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-		{{ 0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-		{{-0.5f,  0.5f,  0.5f}, {0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
+		// Front (+Z)
+		{{-0.5f, -0.5f,  0.5f}, {0, 0, 1}, {1, 0, 0}, {0, 0}},
+		{{ 0.5f, -0.5f,  0.5f}, {0, 0, 1}, {1, 0, 0}, {1, 0}},
+		{{ 0.5f,  0.5f,  0.5f}, {0, 0, 1}, {1, 0, 0}, {1, 1}},
+		{{-0.5f,  0.5f,  0.5f}, {0, 0, 1}, {1, 0, 0}, {0, 1}},
 
-		// Back face
-		{{-0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-		{{-0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}, {1.0f, 1.0f}},
-		{{ 0.5f,  0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 1.0f}},
-		{{ 0.5f, -0.5f, -0.5f}, {0.0f, 0.0f, -1.0f}, {-1.0f, 0.0f, 0.0f}, {0.0f, 0.0f}},
+		// Back (-Z)
+		{{ 0.5f, -0.5f, -0.5f}, {0, 0, -1}, {-1, 0, 0}, {0, 0}},
+		{{-0.5f, -0.5f, -0.5f}, {0, 0, -1}, {-1, 0, 0}, {1, 0}},
+		{{-0.5f,  0.5f, -0.5f}, {0, 0, -1}, {-1, 0, 0}, {1, 1}},
+		{{ 0.5f,  0.5f, -0.5f}, {0, 0, -1}, {-1, 0, 0}, {0, 1}},
 
-		// Additional faces... (left, right, top, bottom)
+		// Left (-X)
+		{{-0.5f, -0.5f, -0.5f}, {-1, 0, 0}, {0, 0, 1}, {0, 0}},
+		{{-0.5f, -0.5f,  0.5f}, {-1, 0, 0}, {0, 0, 1}, {1, 0}},
+		{{-0.5f,  0.5f,  0.5f}, {-1, 0, 0}, {0, 0, 1}, {1, 1}},
+		{{-0.5f,  0.5f, -0.5f}, {-1, 0, 0}, {0, 0, 1}, {0, 1}},
+
+		// Right (+X)
+		{{ 0.5f, -0.5f,  0.5f}, {1, 0, 0}, {0, 0, -1}, {0, 0}},
+		{{ 0.5f, -0.5f, -0.5f}, {1, 0, 0}, {0, 0, -1}, {1, 0}},
+		{{ 0.5f,  0.5f, -0.5f}, {1, 0, 0}, {0, 0, -1}, {1, 1}},
+		{{ 0.5f,  0.5f,  0.5f}, {1, 0, 0}, {0, 0, -1}, {0, 1}},
+
+		// Top (+Y)
+		{{-0.5f,  0.5f,  0.5f}, {0, 1, 0}, {1, 0, 0}, {0, 0}},
+		{{ 0.5f,  0.5f,  0.5f}, {0, 1, 0}, {1, 0, 0}, {1, 0}},
+		{{ 0.5f,  0.5f, -0.5f}, {0, 1, 0}, {1, 0, 0}, {1, 1}},
+		{{-0.5f,  0.5f, -0.5f}, {0, 1, 0}, {1, 0, 0}, {0, 1}},
+
+		// Bottom (-Y)
+		{{-0.5f, -0.5f, -0.5f}, {0, -1, 0}, {1, 0, 0}, {0, 0}},
+		{{ 0.5f, -0.5f, -0.5f}, {0, -1, 0}, {1, 0, 0}, {1, 0}},
+		{{ 0.5f, -0.5f,  0.5f}, {0, -1, 0}, {1, 0, 0}, {1, 1}},
+		{{-0.5f, -0.5f,  0.5f}, {0, -1, 0}, {1, 0, 0}, {0, 1}},
 	};
 
 	const unsigned int cubeIndices[] = {
-	0, 1, 2, 2, 3, 0,   // Front
-	4, 5, 6, 6, 7, 4,   // Back
-	// Add indices for other faces...
+		// Front
+		0,  1,  2,   2,  3,  0,
+		// Back
+		4,  5,  6,   6,  7,  4,
+		// Left
+		8,  9, 10,  10, 11,  8,
+		// Right
+		12, 13, 14,  14, 15, 12,
+		// Top
+		16, 17, 18,  18, 19, 16,
+		// Bottom
+		20, 21, 22,  22, 23, 20,
 	};
 
 	mCubeVB = mRenderer->createVertexBuffer(cubeVertices, sizeof(cubeVertices) / sizeof(Vertex));
@@ -104,13 +136,17 @@ void Game::render(double alpha)
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = mCamera->getViewMatrix();
 	glm::mat4 projection = mCamera->getProjectionMatrix();
-	glm::mat4 mvp = projection * view * model;
+	glm::mat4 viewProj = projection * view;
 
 	GLint viewProjLoc = glGetUniformLocation(mShaderProgram->getResourceID(), "u_ViewProj");
 	GLint modelLoc = glGetUniformLocation(mShaderProgram->getResourceID(), "u_Model");
+	GLint textureLoc = glGetUniformLocation(mShaderProgram->getResourceID(), "u_Texture");
 
-	glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, &mvp[0][0]);
+	glUniform1i(textureLoc, 0);
+	glUniformMatrix4fv(viewProjLoc, 1, GL_FALSE, &viewProj[0][0]);
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
+
+	mRenderer->bindTexture(mTexture->getGPUResource(), 0);
 
 	mRenderer->bindResource(mCubeVB);
 	mRenderer->bindResource(mCubeIB);

@@ -37,3 +37,10 @@ ShaderProgram* ResourceManager::loadShaders(const char* vertexPath, const char* 
 
 	return program;
 }
+
+Texture* ResourceManager::loadTexture(const char* texturePath)
+{
+	Texture* texture = new Texture(texturePath);
+	mResources.push_back(texture);
+	return texture;
+}

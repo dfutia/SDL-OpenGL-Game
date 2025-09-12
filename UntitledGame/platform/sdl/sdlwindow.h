@@ -11,7 +11,9 @@ public:
 	SDLWindow();
 	~SDLWindow();
 
+	void getSize(int& width, int& height) const override { SDL_GetWindowSize(mWindow, &width, &height); }
 	void* getNativeWindow() override { return mWindow; }
+
 	void swapBuffers() override { SDL_GL_SwapWindow(mWindow); }
 private:
 	SDL_Window* mWindow;

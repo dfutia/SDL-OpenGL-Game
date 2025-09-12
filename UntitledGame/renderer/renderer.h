@@ -53,6 +53,18 @@ public:
 	virtual ResourceType getType() const = 0;
 };
 
+class GPUTexture : public GPUResource
+{
+public:
+	GPUTexture() = default;
+	virtual ~GPUTexture() = default;
+
+	virtual unsigned int getWidth() const = 0;
+	virtual unsigned int getHeight() const = 0;
+	virtual bool isCubeMap() const = 0;
+	ResourceType getType() const override { return TEXTURE; }
+};
+
 class IndexBuffer : public GPUResource
 {
 public:
@@ -117,12 +129,20 @@ public:
 	ResourceType getType() const override { return SHADER_PROGRAM; }
 };
 
-//class Texture : public Resource
-//{
-//public:
-//	Texture() = default;
-//	virtual ~Texture() = default;
-//};
+class Texture : public Resource
+{
+public:
+	Texture(const std::string& path);
+	Texture(const std::vector<std::string>& paths);
+	virtual ~Texture();
+
+	GPUTexture* getGPUResource() const { return mGPUResource; }
+private:
+	int mWidth = 0;
+	int mHeight = 0;
+	int mColorBit = 0;
+	GPUTexture* mGPUResource = nullptr;
+};
 
 //class Material : public Resource
 //{
@@ -141,7 +161,7 @@ public:
 	//Mesh* createMesh() { return nullptr; }
 
 	ShaderProgram* loadShaders(const char* vertexPath, const char* fragmentPath);
-	//Texture* loadTexture(const char* texturePath);
+	Texture* loadTexture(const char* texturePath);
 	//Mesh* loadMesh(const char* meshPath);
 private:
 	std::vector<Resource*> mResources;
@@ -153,12 +173,17 @@ public:
 	Renderer() = default;
 	virtual ~Renderer() = default;
 
+	virtual GPUTexture* createTexture(int width, int height, void* data) = 0;
+	//virtual GPUTexture* createCubeMap(int width, int height, std::vector<void*> dataList) = 0;
+
 	virtual VertexBuffer* createVertexBuffer(const Vertex* data, unsigned int count) = 0;
 	virtual IndexBuffer* createIndexBuffer(const unsigned int* indices, unsigned int count) = 0;
 
 	virtual GPUResource* createVertexShader(const char* code) = 0;
 	virtual GPUResource* createFragmentShader(const char* code) = 0;
 	virtual ShaderProgram* createShaderProgram(GPUResource* vs, GPUResource* fs) = 0;
+
+	virtual void bindTexture(GPUTexture* texture, int index) = 0;
 
 	virtual void bindResource(GPUResource* resource) = 0;
 	virtual void unbindResource(GPUResource* resource) = 0;

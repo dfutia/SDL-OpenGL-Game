@@ -12,6 +12,7 @@ class Camera;
 class VertexBuffer;
 class IndexBuffer;
 class ShaderProgram;
+class Texture;
 
 class Game
 {
@@ -35,6 +36,7 @@ private:
 	VertexBuffer* mCubeVB;
 	IndexBuffer* mCubeIB;
 	ShaderProgram* mShaderProgram;
+	Texture* mTexture;
 
 	void loadResources();
 	void update(double deltaTime);

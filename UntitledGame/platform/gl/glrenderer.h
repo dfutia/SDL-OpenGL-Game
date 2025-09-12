@@ -45,6 +45,24 @@ private:
 //{
 //};
 
+class GLTexture : public GPUTexture
+{
+public:
+	GLTexture(unsigned int width, unsigned int height, bool isCubeMap = false);
+	~GLTexture();
+
+	unsigned int getResourceID() const override { return mTextureId; }
+	ResourceType getType() const override { return TEXTURE; }
+	unsigned int getWidth() const override { return mWidth; }
+	unsigned int getHeight() const override { return mHeight; }
+	bool isCubeMap() const override { return mIsCubeMap; }
+private:
+	GLuint mTextureId;
+	unsigned int mWidth;
+	unsigned int mHeight;
+	bool mIsCubeMap;
+};
+
 class GLShader : public GPUResource
 {
 public:
@@ -75,12 +93,17 @@ public:
 	GLRenderer();
 	~GLRenderer() = default;
 
+	GPUTexture* createTexture(int width, int height, void* data) override;
+	//GPUTexture* createCubeMap(int width, int height, std::vector<void*> dataList) override;
+
 	VertexBuffer* createVertexBuffer(const Vertex* data, unsigned int count) override;
 	IndexBuffer* createIndexBuffer(const unsigned int* indices, unsigned int count) override;
 
 	GPUResource* createVertexShader(const char* code) override;
 	GPUResource* createFragmentShader(const char* code) override;
 	ShaderProgram* createShaderProgram(GPUResource* vs, GPUResource* fs) override;
+
+	void bindTexture(GPUTexture* texture, int index) override;
 
 	void bindResource(GPUResource* resource) override;
 	void unbindResource(GPUResource* resource) override;
